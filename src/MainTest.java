@@ -7,15 +7,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@DisplayName("Person Intersection Tests")
 class MainTest {
     @Nested
-    @DisplayName("test for method retainAll")
-    class RetainAllTests{
+    @DisplayName("Tests for Common Persons in Lists")
+    class CommonPersonsTests{
 
 
     @Test
-    @DisplayName("checking the intersection between two sets")
-    void testRetainAll() {
+    @DisplayName("Lists have common persons")
+    void testCommonPersonsPresent() {
         List<Person> list1 = List.of(
                 new Person("Olga", 34),
                 new Person("Jack", 26),
@@ -32,19 +33,17 @@ class MainTest {
 
         Set<Person> set1 = new HashSet<>(list1);
         Set<Person> set2 = new HashSet<>(list2);
+
         set1.retainAll(set2);
 
-        Set<Person> expectedSet = new HashSet<>(List.of(
-                new Person("Jack", 26),
-                new Person("Sandra", 22)
-        ));
-
-        Assertions.assertEquals(expectedSet,set1);
+        Assertions.assertEquals(2, set1.size(), "Expected 2 common persons");
+        Assertions.assertTrue(set1.contains(new Person("Jack", 26)));
+        Assertions.assertTrue(set1.contains(new Person("Sandra", 22)));
     }
 
         @Test
-        @DisplayName("checking intersection with an identical set")
-        void testRetainAllWithSameSet(){
+        @DisplayName("Lists have no common persons")
+        void testNoCommonPersons(){
             List<Person> list1 = List.of(
                     new Person("Olga", 34),
                     new Person("Jack", 26)
@@ -55,8 +54,21 @@ class MainTest {
 
             set1.retainAll(set2);
 
-            Assertions.assertEquals(set1, set2);
+            Assertions.assertTrue(set1.isEmpty(), "Expected no common persons");
         }
 
-}
+        @Test
+        @DisplayName("Empty input lists")
+        void testEmptyLists() {
+            List<Person> list1 = List.of();
+            List<Person> list2 = List.of();
+
+            Set<Person> set1 = new HashSet<>(list1);
+            Set<Person> set2 = new HashSet<>(list2);
+
+            set1.retainAll(set2);
+
+            Assertions.assertTrue(set1.isEmpty(), "Expected no common persons with empty lists");
+        }
+    }
 }
